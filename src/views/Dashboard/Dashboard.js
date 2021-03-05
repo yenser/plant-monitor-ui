@@ -17,7 +17,7 @@ const Dashboard = () => {
   return (
     <Grid className={classes.container} container spacing={3}>
       <Typography variant="h1">Dashboard</Typography>
-      <Image id={12} />
+      {/* <Image id={12} /> */}
     </Grid>
   )
 }

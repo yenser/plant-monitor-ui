@@ -22,7 +22,6 @@ const useApi = (defaultLoading = false) => {
   const getDbSize = () => {
     setLoading(true);
     axios.get(getUrl('/dbsize')).then(res => {
-
       setState({
         ...state,
         loading: false,
