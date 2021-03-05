@@ -8,15 +8,17 @@ import Image from '../../containers/Image'
 
 const useStyles = makeStyles({
   container: {
-    margin: 20
+    // padding: 20
   }
 })
 
 const Dashboard = () => {
   const classes = useStyles();
   return (
-    <Grid className={classes.container} container spacing={3}>
-      <Typography variant="h1">Dashboard</Typography>
+    <Grid className={classes.container} container>
+      <Grid item>
+        <Typography variant="h1">Dashboard</Typography>
+      </Grid>
       {/* <Image id={12} /> */}
     </Grid>
   )
