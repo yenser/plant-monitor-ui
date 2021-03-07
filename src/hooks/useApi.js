@@ -8,8 +8,9 @@ const getUrl = (path = '') => {
 
 const useApi = (defaultLoading = false) => {
   const [ state, setState] = useState({
-    loading: false,
-    dbSize: ''
+    loading: defaultLoading,
+    dbSize: '',
+    systems: []
   });
 
   const setLoading = (loadingState) => {
@@ -26,7 +27,7 @@ const useApi = (defaultLoading = false) => {
         ...state,
         loading: false,
         dbSize: res.data.size
-      })
+      });
       
     }).catch(err => {
       console.error(err.message);
