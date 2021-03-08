@@ -6,7 +6,9 @@ const getUrl = (path = '') => {
 }
 
 const Image = ({ id }) => {
-
+  if(id === null) {
+    return null;
+  }
   return <img src={getUrl(id)}></img>
 }
 

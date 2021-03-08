@@ -6,9 +6,11 @@ import DefaultHeader from './DefaultHeader';
 
 import routes from '../../routes';
 
+const TITLE = 'Plant Monitor';
+
 const useStyles = makeStyles({
   container: {
-    margin: 20,
+    padding: 20,
   }
 });
 
@@ -19,7 +21,7 @@ const DefaultLayout = () => {
 
   return (
     <>
-      <DefaultHeader title="Raspberry Pi Dashboard" />
+      <DefaultHeader title={TITLE} />
         <Suspense fallback={getSuspenseDOM()}>
           <Grid className={classes.container} container spacing={3}>
             <Routes>

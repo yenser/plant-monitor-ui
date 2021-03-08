@@ -10,16 +10,40 @@ import {
   TableCell,
   TableBody
 } from '@material-ui/core';
+import { red, green, yellow } from '@material-ui/core/colors';
+import ErrorIcon from '@material-ui/icons/Error';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
+const getTempColor = (temp) => {
+  if (temp) {
+    if (temp >= 80) {
+      return red[300];
+    } else if (temp >= 70) {
+      return yellow[600];
+    } else {
+      return null;
+    }
+  } else {
+    return null;
+  }
+}
 
 const mapSystemsRows = (rows) => {
   return rows.map((row) => (
-    <TableRow key={row.system}>
+    <TableRow key={row.name}>
       <TableCell component="th" scope="row">
-        {row.system}
+        {row.name}
       </TableCell>
-      <TableCell align="right">{row.temp}</TableCell>
-      <TableCell align="right">Yes</TableCell>
+      <TableCell align="right" style={{ color: getTempColor(row.temperature) }}>
+        {Number.parseFloat(row.temperature).toFixed(2)} &deg;C
+      </TableCell>
+      <TableCell align="right">
+        {
+          row.status
+            ? <CheckCircleIcon style={{ color: green[300] }} />
+            : <ErrorIcon style={{ color: red[300] }} />
+        }
+      </TableCell>
     </TableRow>
   ));
 }
