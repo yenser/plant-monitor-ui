@@ -1,6 +1,7 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { socket } from '../../SocketContext';
 import {
+  Button,
   Grid,
   Paper,
   TableContainer,
@@ -10,9 +11,20 @@ import {
   TableCell,
   TableBody
 } from '@material-ui/core';
+import useDevices from '../../hooks/useDevices';
 import { red, green, yellow } from '@material-ui/core/colors';
 import ErrorIcon from '@material-ui/icons/Error';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import { makeStyles } from '@material-ui/core/styles';
+import CreateDeviceModal from './CreateDeviceModal';
+import useToggle from '../../hooks/useToggle';
+
+const useStyles = makeStyles({
+  button: {
+    marginTop: 5,
+    marginLeft: 5
+  }
+})
 
 const getTempColor = (temp) => {
   if (temp) {
@@ -48,11 +60,28 @@ const mapSystemsRows = (rows) => {
   ));
 }
 
+const mapDeviceRows = (rows) => {
+  return rows.map((row) => (
+    <TableRow key={row.name}>
+      <TableCell component="th" scope="row">{row.name}</TableCell>
+      <TableCell align="right">{row.type}</TableCell>
+      <TableCell align="right">{row.ip_address}</TableCell>
+      <TableCell align="right">{row.port}</TableCell>
+    </TableRow>
+  ));
+}
+
 const Systems = () => {
 
   const [systems, setSystems] = useState([]);
+  const { devices, getDevices } = useDevices();
+  const classes = useStyles();
+  const [ open, toggle ] = useToggle();
 
   useEffect(() => {
+
+    getDevices();
+
     socket.on('systems', (res) => {
       setSystems(res);
     });
@@ -65,6 +94,7 @@ const Systems = () => {
 
   console.log('systems', systems);
   return (
+    <>
     <Grid item xs={12} md={6}>
       <TableContainer component={Paper}>
         <Table>
@@ -81,6 +111,28 @@ const Systems = () => {
         </Table>
       </TableContainer>
     </Grid>
+
+    <Grid item xs={12} md={6}>
+      <TableContainer component={Paper}>
+        <Button variant="contained" color="primary" className={classes.button} onClick={toggle}>New Device</Button>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell align="right">Type</TableCell>
+              <TableCell align="right">Ip Address</TableCell>
+              <TableCell align="right">Port</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {mapDeviceRows(devices)}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Grid>
+
+    <CreateDeviceModal open={open} toggle={toggle} />
+    </>
   );
 }
 
