@@ -38,8 +38,8 @@ const useImages = (defaultLoading = false) => {
     });
   }
 
-  const captureImage = (computerDetails) => {
-    axios.get(createUrlFromComputerDetails(computerDetails)).then(res => {
+  const captureImage = (device) => {
+    axios.get(getUrl(`/images/capture/${device.id}`)).then(res => {
       getImages();
     }).catch(err => {
       console.error(err.message);

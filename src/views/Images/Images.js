@@ -15,6 +15,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import Image from '../../containers/Image';
 import useImages from '../../hooks/useImages';
+import useDevices from '../../hooks/useDevices';
 import useToggle from '../../hooks/useToggle';
 import ImageModal from './ImageModal';
 
@@ -44,8 +45,10 @@ const Images = () => {
 
   const [selectedImage, setSelectedImaged] = useState(null)
   const { images, getImages, captureImage } = useImages();
+  const { devices, getDevices } = useDevices();
   const [modalOpen, toggleModal] = useToggle();
   useEffect(() => {
+    getDevices();
     getImages();
   }, []);
   const classes = useStyles();
@@ -78,7 +81,7 @@ const Images = () => {
         <Paper className={classes.paper}>
           <Typography variant="h3">Cameras</Typography>
 
-          {config.cameraServers.map(srv => {
+          {devices.map(srv => {
             return (
               <div key={srv.ip} className={classes.camera}>
                 <Typography variant="h6">{srv.name}</Typography>
