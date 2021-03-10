@@ -30,8 +30,8 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    [theme.breakpoints.up('xs')]: {
-      width: `calc(100% - ${drawerWidth}px)`,
+    [theme.breakpoints.up('sm')]: {
+      width: `calc(100% - ${drawerWidth})`,
       marginLeft: drawerWidth,
     },
   },

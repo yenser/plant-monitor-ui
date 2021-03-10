@@ -15,6 +15,8 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import Image from '../../containers/Image';
 import useImages from '../../hooks/useImages';
+import useToggle from '../../hooks/useToggle';
+import ImageModal from './ImageModal';
 
 const useStyles = makeStyles({
   image: {
@@ -29,9 +31,9 @@ const useStyles = makeStyles({
   }
 })
 
-const mapRows = (rows, setSelectedImaged) => {
+const mapRows = (rows, selectImage) => {
   return rows.map((row) => (
-    <TableRow hover={true} key={row.id} onClick={() => setSelectedImaged(row.id)}>
+    <TableRow hover={true} key={row.id} onClick={() => selectImage(row.id)}>
       <TableCell component="th" scope="row">{row.id}</TableCell>
       <TableCell align="right">{row.name}</TableCell>
     </TableRow>
@@ -42,10 +44,16 @@ const Images = () => {
 
   const [selectedImage, setSelectedImaged] = useState(null)
   const { images, getImages, captureImage } = useImages();
+  const [modalOpen, toggleModal] = useToggle();
   useEffect(() => {
     getImages();
   }, []);
   const classes = useStyles();
+
+  const selectImage = (imageId) => {
+    setSelectedImaged(imageId);
+    toggleModal();
+  }
 
 
   return (
@@ -60,7 +68,7 @@ const Images = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {mapRows(images, setSelectedImaged)}
+              {mapRows(images, selectImage)}
             </TableBody>
           </Table>
         </TableContainer>
@@ -84,14 +92,7 @@ const Images = () => {
           })}
         </Paper>
       </Grid>
-
-      {selectedImage ? <Grid item lg={12}>
-        <Paper className={classes.image}>
-          <Image id={selectedImage} />
-        </Paper>
-      </Grid>
-        : null}
-
+      <ImageModal imageId={selectedImage} open={modalOpen} toggle={toggleModal} />
     </>
   );
 }

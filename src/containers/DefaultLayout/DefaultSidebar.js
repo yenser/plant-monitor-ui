@@ -18,9 +18,16 @@ const DefaultSidebar = ({ classes, mobileOpen, toggleMobile, title, navConfig, c
   const location = useLocation();
   const theme = useTheme();
 
+  const changePage = (url) => {
+    if(mobileOpen) {
+      toggleMobile();
+    }
+    navigate(url);
+  }
+
   const makeLink = (item) => {
     return (
-        <ListItem button selected={location.pathname === item.url} key={item.name} onClick={() => navigate(item.url)}>
+        <ListItem button selected={location.pathname === item.url} key={item.name} onClick={() => changePage(item.url)}>
           {item.icon ? <ListItemIcon><item.icon /></ListItemIcon> : null}
           <ListItemText primary={item.name} />
         </ListItem>
