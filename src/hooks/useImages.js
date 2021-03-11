@@ -47,10 +47,20 @@ const useImages = (defaultLoading = false) => {
     });
   }
 
+  const deleteImage = (imageId) => {
+    axios.delete(getUrl(`/images/${imageId}`)).then(res => {
+      getImages();
+    }).catch(err => {
+      console.error(err.message);
+      setLoading(false);
+    });
+  }
+
   return {
     ...state,
     getImages: useCallback(getImages, []),
-    captureImage: useCallback(captureImage, [])
+    captureImage: useCallback(captureImage, []),
+    deleteImage: useCallback(deleteImage, [])
   }
 
 }

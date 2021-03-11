@@ -12,6 +12,8 @@ import {
   TableBody,
   Typography
 } from '@material-ui/core';
+import { red } from '@material-ui/core/colors';
+import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
 import Image from '../../containers/Image';
 import useImages from '../../hooks/useImages';
@@ -32,11 +34,18 @@ const useStyles = makeStyles({
   }
 })
 
-const mapRows = (rows, selectImage) => {
+const mapRows = (rows, selectImage, deleteImage) => {
+
+  const handleDeleteColumn = (e, id) => {
+    e.stopPropagation();
+    deleteImage(id);
+  }
+
   return rows.map((row) => (
     <TableRow hover={true} key={row.id} onClick={() => selectImage(row.id)}>
       <TableCell component="th" scope="row">{row.id}</TableCell>
       <TableCell align="right">{row.name}</TableCell>
+      <TableCell align="right"><CloseIcon style={{color: red[400], cursor: 'pointer'}} onClick={(e) => handleDeleteColumn(e, row.id)} /></TableCell>
     </TableRow>
   ));
 }
@@ -44,7 +53,7 @@ const mapRows = (rows, selectImage) => {
 const Images = () => {
 
   const [selectedImage, setSelectedImaged] = useState(null)
-  const { images, getImages, captureImage } = useImages();
+  const { images, getImages, deleteImage, captureImage } = useImages();
   const { devices, getDevices } = useDevices();
   const [modalOpen, toggleModal] = useToggle();
   useEffect(() => {
@@ -68,10 +77,11 @@ const Images = () => {
               <TableRow>
                 <TableCell>Id</TableCell>
                 <TableCell align="right">Name</TableCell>
+                <TableCell align="right" styles={{ width: 20 }}></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {mapRows(images, selectImage)}
+              {mapRows(images, selectImage, deleteImage)}
             </TableBody>
           </Table>
         </TableContainer>
