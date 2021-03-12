@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import CloseIcon from '@material-ui/icons/Close';
+import GetAppIcon from '@material-ui/icons/GetApp';
 import { makeStyles } from '@material-ui/core/styles';
 import Image from '../../containers/Image';
 import useImages from '../../hooks/useImages';
@@ -21,7 +22,7 @@ import useDevices from '../../hooks/useDevices';
 import useToggle from '../../hooks/useToggle';
 import ImageModal from './ImageModal';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   image: {
     padding: 10
   },
@@ -31,10 +32,13 @@ const useStyles = makeStyles({
   camera: {
     paddingTop: 5,
     paddingBottom: 5
+  },
+  buttons: {
+    margin: theme.spacing(5)
   }
-})
+}));
 
-const mapRows = (rows, selectImage, deleteImage) => {
+const Rows = ({ classes, rows, selectImage, deleteImage}) => {
 
   const handleDeleteColumn = (e, id) => {
     e.stopPropagation();
@@ -45,7 +49,10 @@ const mapRows = (rows, selectImage, deleteImage) => {
     <TableRow hover={true} key={row.id} onClick={() => selectImage(row.id)}>
       <TableCell component="th" scope="row">{row.id}</TableCell>
       <TableCell align="right">{row.name}</TableCell>
-      <TableCell align="right"><CloseIcon style={{color: red[400], cursor: 'pointer'}} onClick={(e) => handleDeleteColumn(e, row.id)} /></TableCell>
+      <TableCell className={classes.buttons} align="right">
+        <GetAppIcon onClick={() => {}} />
+        <CloseIcon style={{color: red[400], cursor: 'pointer'}} onClick={(e) => handleDeleteColumn(e, row.id)} />
+      </TableCell>
     </TableRow>
   ));
 }
@@ -81,7 +88,7 @@ const Images = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {mapRows(images, selectImage, deleteImage)}
+              <Rows classes={classes} rows={images} selectImage={selectImage} deleteImage={deleteImage} />
             </TableBody>
           </Table>
         </TableContainer>
