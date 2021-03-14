@@ -1,10 +1,6 @@
 import { useState, useCallback } from 'react';
 import axios from 'axios';
-import config from '../config';
-
-const getUrl = (path = '') => {
-  return `http://${config.server.ip}:${config.server.port}${path}`;
-}
+import getUrl from '../utils/getUrl';
 
 const useDevices = (defaultLoading = false) => {
   const [ state, setState] = useState({

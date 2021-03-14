@@ -1,14 +1,6 @@
 import { useState, useCallback } from 'react';
 import axios from 'axios';
-import config from '../config';
-
-const getUrl = (path = '') => {
-  return `http://${config.server.ip}:${config.server.port}${path}`;
-}
-
-const createUrlFromComputerDetails = (details) => {
-  return `http://${details.ip}:${details.port}/capture`
-}
+import getUrl from '../utils/getUrl';
 
 const useImages = (defaultLoading = false) => {
   const [ state, setState] = useState({
@@ -38,8 +30,11 @@ const useImages = (defaultLoading = false) => {
     });
   }
 
-  const captureImage = (device) => {
-    axios.get(getUrl(`/images/capture/${device.id}`)).then(res => {
+  const captureImage = (device, name = undefined) => {
+    const  body = {
+      name
+    }
+    axios.post(getUrl(`/images/capture/${device.id}`), body).then(res => {
       getImages();
     }).catch(err => {
       console.error(err.message);

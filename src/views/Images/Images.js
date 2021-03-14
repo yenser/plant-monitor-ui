@@ -21,6 +21,7 @@ import useImages from '../../hooks/useImages';
 import useDevices from '../../hooks/useDevices';
 import useToggle from '../../hooks/useToggle';
 import ImageModal from './ImageModal';
+import getUrl from '../../utils/getUrl'
 
 const useStyles = makeStyles(theme => ({
   image: {
@@ -38,20 +39,32 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Rows = ({ classes, rows, selectImage, deleteImage}) => {
+const Rows = ({ classes, rows, selectImage, deleteImage }) => {
 
   const handleDeleteColumn = (e, id) => {
     e.stopPropagation();
     deleteImage(id);
   }
 
+  const stopPropagation = (e) => e.stopPropagation();
+
   return rows.map((row) => (
     <TableRow hover={true} key={row.id} onClick={() => selectImage(row.id)}>
-      <TableCell component="th" scope="row">{row.id}</TableCell>
-      <TableCell align="right">{row.name}</TableCell>
-      <TableCell className={classes.buttons} align="right">
-        <GetAppIcon onClick={() => {}} />
-        <CloseIcon style={{color: red[400], cursor: 'pointer'}} onClick={(e) => handleDeleteColumn(e, row.id)} />
+      <TableCell component="th" scope="row">
+        <Button
+          variant="contained"
+          color="default"
+          component="a"
+          download={row.name}
+          href={getUrl(`/images/${row.id}`)}
+          onClick={stopPropagation}
+          startIcon={<GetAppIcon />}
+        >Download</Button>
+      </TableCell>
+      <TableCell>{row.name}</TableCell>
+      <TableCell align="right">
+
+        <CloseIcon style={{ color: red[400], cursor: 'pointer' }} onClick={(e) => handleDeleteColumn(e, row.id)} />
       </TableCell>
     </TableRow>
   ));
@@ -82,8 +95,8 @@ const Images = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Id</TableCell>
-                <TableCell align="right">Name</TableCell>
+                <TableCell>Download</TableCell>
+                <TableCell>Name</TableCell>
                 <TableCell align="right" styles={{ width: 20 }}></TableCell>
               </TableRow>
             </TableHead>
@@ -100,11 +113,12 @@ const Images = () => {
 
           {devices.map(srv => {
             return (
-              <div key={srv.ip} className={classes.camera}>
+              <div key={srv.id} className={classes.camera}>
                 <Typography variant="h6">{srv.name}</Typography>
                 <Button
                   variant="contained"
                   color="primary"
+                  disabled={!srv.online}
                   onClick={() => captureImage(srv)}
                 >Take Photo</Button>
               </div>
